@@ -46,7 +46,19 @@ La aplicación se abrirá automáticamente en tu navegador en `http://localhost:
 - Podman instalado en tu sistema
 - podman-compose (opcional, para usar docker-compose.yml)
 
-### Opción 1: Usando Makefile (Recomendado)
+### Opción 1: Scripts simplificados (Más fácil) ⚡
+
+Para máxima simplicidad, usa los scripts incluidos:
+
+```bash
+# Reinicio completo: detener, eliminar, construir y ejecutar
+./start.sh
+
+# Detener y limpiar todo
+./stop.sh
+```
+
+### Opción 2: Usando Makefile
 
 El proyecto incluye un `Makefile` para facilitar el uso con Podman:
 
@@ -54,20 +66,33 @@ El proyecto incluye un `Makefile` para facilitar el uso con Podman:
 # Ver todos los comandos disponibles
 make help
 
-# Construir la imagen
-make build
+# Reinicio completo (usa start.sh)
+make quick-start
 
-# Ejecutar el contenedor
-make run
+# Detener completamente (usa stop.sh)
+make quick-stop
 
-# Ver logs
-make logs
-
-# Detener y limpiar
-make clean
+# Comandos individuales:
+make build     # Construir la imagen
+make run       # Ejecutar el contenedor
+make logs      # Ver logs
+make clean     # Detener y limpiar
 ```
 
-### Opción 2: Comandos manuales de Podman
+### Opción 3: Usando podman-compose
+
+```bash
+# Levantar la aplicación
+podman-compose up -d
+
+# Ver logs
+podman-compose logs -f
+
+# Detener la aplicación
+podman-compose down
+```
+
+### Opción 4: Comandos manuales de Podman
 
 ```bash
 # Construir la imagen
@@ -86,18 +111,6 @@ podman stop textual-guardian-app
 podman rm textual-guardian-app
 ```
 
-### Opción 3: Usando podman-compose
-
-```bash
-# Levantar la aplicación
-podman-compose up -d
-
-# Ver logs
-podman-compose logs -f
-
-# Detener la aplicación
-podman-compose down
-```
 
 ### Modo Desarrollo
 
@@ -146,6 +159,8 @@ textual-guardian/
 ├── Dockerfile          # Configuración de contenedor
 ├── docker-compose.yml  # Configuración para podman-compose
 ├── Makefile           # Comandos automatizados para Podman
+├── start.sh           # Script de inicio simplificado
+├── stop.sh            # Script de detención y limpieza
 ├── .dockerignore      # Archivos ignorados en la imagen
 ├── README.md          # Este archivo
 └── LICENSE           # Licencia del proyecto

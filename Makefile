@@ -11,7 +11,7 @@ GREEN = \033[0;32m
 YELLOW = \033[0;33m
 NC = \033[0m # No Color
 
-.PHONY: help build run stop clean logs shell
+.PHONY: help build run stop clean logs shell quick-start quick-stop
 
 help: ## Mostrar ayuda
 	@echo "$(GREEN)Textual Guardian - Comandos disponibles:$(NC)"
@@ -69,3 +69,11 @@ dev: ## Modo desarrollo con volumen montado
 		-v ./:/app:Z \
 		$(IMAGE_NAME)
 	@echo "$(GREEN)Modo desarrollo activo en: http://localhost:$(PORT)$(NC)"
+
+quick-start: ## Reinicio completo con un solo comando (usando start.sh)
+	@echo "$(GREEN)Ejecutando reinicio completo...$(NC)"
+	./start.sh
+
+quick-stop: ## Detener y limpiar completamente (usando stop.sh)
+	@echo "$(YELLOW)Deteniendo y limpiando...$(NC)"
+	./stop.sh
