@@ -72,64 +72,98 @@ def main():
     # Título principal centrado
     st.markdown('<h1 class="centered-title">📝 Textual Guardian</h1>', unsafe_allow_html=True)
     
-    # Layout principal en dos columnas
-    col1, col2 = st.columns([1, 1])
+    # Área de texto principal
+    st.markdown("#### 📝 Ingresa tu texto:")
+    text_input = st.text_area(
+        "",
+        height=300,
+        placeholder="Escribe o pega aquí el texto que deseas analizar...\n\nEl análisis se actualiza automáticamente mientras escribes.",
+        key="text_input"
+    )
     
-    # COLUMNA IZQUIERDA - Área de texto
-    with col1:
-        st.markdown("#### 📝 Ingresa tu texto:")
-        text_input = st.text_area(
-            "",
-            height=500,
-            placeholder="Escribe o pega aquí el texto que deseas analizar...\n\nEl análisis se actualiza automáticamente mientras escribes.",
-            key="text_input"
-        )
-    
-    # COLUMNA DERECHA - Análisis y leyenda
-    with col2:
-        if text_input and text_input.strip():
-            # Crear instancia del analizador
-            analyzer = TextAnalyzer()
-            
-            # Realizar análisis
-            results = analyzer.analyze_text(text_input)
-            
-            # Mostrar leyenda de colores primero
-            st.markdown("##### 🎨 Leyenda de Colores:")
-            st.markdown("""
-            <div style="margin: 5px 0;">
-                <span class="participio">Participios (-ado, -ido)</span><br>
-                <span class="gerundio">Gerundios (-ando, -endo)</span><br>
-                <span class="expresion-problematica">Expresiones problemáticas</span><br>
-                <span class="adjetivo-problematico">Adjetivos calificativos</span><br>
-                <span class="palabra-repetida">Palabras repetidas</span><br>
-                <span class="coma-incorrecta">Comas antes de 'y'</span>
-            </div>
-            """, unsafe_allow_html=True)
-            
+    if text_input and text_input.strip():
+        # Crear instancia del analizador
+        analyzer = TextAnalyzer()
+        
+        # Realizar análisis
+        results = analyzer.analyze_text(text_input)
+        
+        # Mostrar leyenda de colores con palabras reales
+        st.markdown("##### 🎨 Leyenda de Colores:")
+        display_dynamic_legend(results)
+        
+        # Layout en dos columnas para el análisis
+        col1, col2 = st.columns([1, 1])
+        
+        with col1:
             # Mostrar conteos específicos
             display_specific_counts(results)
             
+        with col2:
             # Mostrar texto marcado
             st.markdown("##### 🎨 Texto con Errores Marcados:")
             marked_text = create_highlighted_text(text_input, results)
             st.markdown(marked_text, unsafe_allow_html=True)
             
-        else:
-            # Mostrar leyenda de colores cuando no hay texto
-            st.markdown("##### 🎨 Leyenda de Colores:")
-            st.markdown("""
-            <div style="margin: 5px 0;">
-                <span class="participio">Participios (-ado, -ido)</span><br>
-                <span class="gerundio">Gerundios (-ando, -endo)</span><br>
-                <span class="expresion-problematica">Expresiones problemáticas</span><br>
-                <span class="adjetivo-problematico">Adjetivos calificativos</span><br>
-                <span class="palabra-repetida">Palabras repetidas</span><br>
-                <span class="coma-incorrecta">Comas antes de 'y'</span>
-            </div>
-            """, unsafe_allow_html=True)
-            
-            st.info("👈 Escribe algo en el área de texto para ver el análisis en tiempo real")
+    else:
+        st.info("👆 Escribe algo en el área de texto para ver el análisis en tiempo real")
+
+def display_dynamic_legend(results):
+    """Muestra leyenda de colores con palabras reales encontradas"""
+    
+    legend_items = []
+    
+    # Participios
+    if results['participios']:
+        participios_text = ', '.join(results['participios'][:5])  # Máximo 5 palabras
+        if len(results['participios']) > 5:
+            participios_text += "..."
+        legend_items.append(f'<span class="participio">Participios</span>: {participios_text}')
+    
+    # Gerundios
+    if results['gerundios']:
+        gerundios_text = ', '.join(results['gerundios'][:5])
+        if len(results['gerundios']) > 5:
+            gerundios_text += "..."
+        legend_items.append(f'<span class="gerundio">Gerundios</span>: {gerundios_text}')
+    
+    # Expresiones problemáticas
+    if results['forbidden_expressions']:
+        expresiones_text = ', '.join(results['forbidden_expressions'][:5])
+        if len(results['forbidden_expressions']) > 5:
+            expresiones_text += "..."
+        legend_items.append(f'<span class="expresion-problematica">Expresiones problemáticas</span>: {expresiones_text}')
+    
+    # Adjetivos problemáticos
+    if results['problematic_adjectives']:
+        adjetivos_text = ', '.join(results['problematic_adjectives'][:5])
+        if len(results['problematic_adjectives']) > 5:
+            adjetivos_text += "..."
+        legend_items.append(f'<span class="adjetivo-problematico">Adjetivos calificativos</span>: {adjetivos_text}')
+    
+    # Palabras repetidas
+    if results['repeated_words']:
+        repetidas_text = ', '.join(list(results['repeated_words'].keys())[:5])
+        if len(results['repeated_words']) > 5:
+            repetidas_text += "..."
+        legend_items.append(f'<span class="palabra-repetida">Palabras repetidas</span>: {repetidas_text}')
+    
+    # Comas incorrectas
+    if results['comma_before_y']:
+        comas_text = ', '.join([f'"{item}"' for item in results['comma_before_y'][:3]])
+        if len(results['comma_before_y']) > 3:
+            comas_text += "..."
+        legend_items.append(f'<span class="coma-incorrecta">Comas antes de \'y\'</span>: {comas_text}')
+    
+    if legend_items:
+        legend_html = '<br>'.join(legend_items)
+        st.markdown(f"""
+        <div style="margin: 5px 0; padding: 10px; background-color: rgba(128, 128, 128, 0.1); border-radius: 5px;">
+            {legend_html}
+        </div>
+        """, unsafe_allow_html=True)
+    else:
+        st.success("🎉 ¡No se detectaron problemas en tu texto!")
 
 def display_specific_counts(results):
     """Muestra conteos específicos en formato compacto"""
