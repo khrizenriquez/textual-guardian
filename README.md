@@ -135,9 +135,18 @@ podman run -d --name textual-guardian-dev -p 8501:8501 -v ./:/app:Z textual-guar
 ## 📖 Cómo usar
 
 1. Abre la aplicación en tu navegador
-2. Pega o escribe tu texto en el área de texto
-3. Haz clic en "🔍 Analizar Texto"
-4. Revisa los resultados y sugerencias de mejora
+2. Escribe o pega tu texto en el área de texto de la izquierda
+3. El análisis se actualiza **automáticamente en tiempo real**
+4. Revisa los resultados en la columna derecha:
+   - **Leyenda de Colores:** Muestra las palabras problemáticas encontradas
+   - **Conteos Específicos:** Estadísticas detalladas del texto
+   - **Texto Marcado:** Tu texto con errores resaltados en colores
+
+### 🖼️ Interfaz de la Aplicación
+
+![Interfaz de Textual Guardian](https://github.com/user-attachments/assets/your-interface-image-url-here)
+
+*La interfaz muestra análisis en tiempo real con leyenda dinámica, conteos específicos y texto marcado con colores para diferentes tipos de errores.*
 
 ## 🎯 Reglas de Redacción Implementadas
 
