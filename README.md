@@ -15,6 +15,22 @@ Analizador de redacción académica desarrollado en Python con Streamlit que det
 - ⚡ **Análisis en tiempo real** - Resultados instantáneos mientras escribes
 - 🎨 **Marcado visual** - Errores resaltados con diferentes colores
 
+## 🎯 Reglas de Redacción Implementadas
+
+La aplicación detecta problemas basados en las siguientes indicaciones académicas:
+
+1. **Repetición de términos** - Sugiere usar sinónimos
+2. **Participios** - Evitar terminaciones -ado, -ido
+3. **Gerundios** - Eliminar terminaciones -ando, -endo
+4. **Expresiones prohibidas**:
+   - "ya que" → usar "debido a que", "dado que"
+   - "etc." → usar "tales como", "entre otros"
+   - "pero" → usar "sin embargo", "no obstante"
+   - "puede/pueden" → usar "permite", "facilita"
+   - "pretende" → usar "busca", "requiere"
+5. **Adjetivos calificativos** - Evitar términos vagos
+6. **Puntuación** - No usar coma antes de "y"
+
 ## 🚀 Instalación y Uso
 
 ### Requisitos previos
@@ -155,22 +171,6 @@ podman run -d --name textual-guardian-dev -p 8501:8501 -v ./:/app:Z textual-guar
 
 *La aplicación cuenta con soporte bilingüe completo (español/inglés) para la interfaz de usuario. El análisis de texto se mantiene basado en reglas académicas en español independientemente del idioma de la interfaz. La interfaz muestra análisis en tiempo real con leyenda dinámica, conteos específicos y texto marcado con colores para diferentes tipos de errores.*
 
-## 🎯 Reglas de Redacción Implementadas
-
-La aplicación detecta problemas basados en las siguientes indicaciones académicas:
-
-1. **Repetición de términos** - Sugiere usar sinónimos
-2. **Participios** - Evitar terminaciones -ado, -ido
-3. **Gerundios** - Eliminar terminaciones -ando, -endo
-4. **Expresiones prohibidas**:
-   - "ya que" → usar "debido a que", "dado que"
-   - "etc." → usar "tales como", "entre otros"
-   - "pero" → usar "sin embargo", "no obstante"
-   - "puede/pueden" → usar "permite", "facilita"
-   - "pretende" → usar "busca", "requiere"
-5. **Adjetivos calificativos** - Evitar términos vagos
-6. **Puntuación** - No usar coma antes de "y"
-
 ## 🛠️ Estructura del Proyecto
 
 ```
@@ -186,6 +186,9 @@ textual-guardian/
 ├── .dockerignore      # Archivos ignorados en la imagen
 ├── docs/              # Documentación y recursos
 │   └── assets/        # Imágenes y recursos multimedia
+│       ├── script-start.png
+│       ├── textual-guardian-spanish.png
+│       └── textual-guardian-english.png
 ├── README.md          # Este archivo
 └── LICENSE           # Licencia del proyecto
 ```
