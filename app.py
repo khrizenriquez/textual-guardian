@@ -72,41 +72,43 @@ def main():
     # Título principal centrado
     st.markdown('<h1 class="centered-title">📝 Textual Guardian</h1>', unsafe_allow_html=True)
     
-    # Área de texto principal
-    st.markdown("#### 📝 Ingresa tu texto:")
-    text_input = st.text_area(
-        "",
-        height=300,
-        placeholder="Escribe o pega aquí el texto que deseas analizar...\n\nEl análisis se actualiza automáticamente mientras escribes.",
-        key="text_input"
-    )
+    # Layout principal en dos columnas
+    col1, col2 = st.columns([1, 1])
     
-    if text_input and text_input.strip():
-        # Crear instancia del analizador
-        analyzer = TextAnalyzer()
+    # COLUMNA IZQUIERDA - Área de texto y leyenda
+    with col1:
+        st.markdown("#### 📝 Ingresa tu texto:")
+        text_input = st.text_area(
+            "",
+            height=400,
+            placeholder="Escribe o pega aquí el texto que deseas analizar...\n\nEl análisis se actualiza automáticamente mientras escribes.",
+            key="text_input"
+        )
         
-        # Realizar análisis
-        results = analyzer.analyze_text(text_input)
-        
-        # Mostrar leyenda de colores con palabras reales
-        st.markdown("##### 🎨 Leyenda de Colores:")
-        display_dynamic_legend(results)
-        
-        # Layout en dos columnas para el análisis
-        col1, col2 = st.columns([1, 1])
-        
-        with col1:
+        if text_input and text_input.strip():
+            # Crear instancia del analizador
+            analyzer = TextAnalyzer()
+            
+            # Realizar análisis
+            results = analyzer.analyze_text(text_input)
+            
+            # Mostrar leyenda de colores con palabras reales debajo del párrafo
+            st.markdown("##### 🎨 Leyenda de Colores:")
+            display_dynamic_legend(results)
+    
+    # COLUMNA DERECHA - Análisis
+    with col2:
+        if text_input and text_input.strip():
             # Mostrar conteos específicos
             display_specific_counts(results)
             
-        with col2:
             # Mostrar texto marcado
             st.markdown("##### 🎨 Texto con Errores Marcados:")
             marked_text = create_highlighted_text(text_input, results)
             st.markdown(marked_text, unsafe_allow_html=True)
             
-    else:
-        st.info("👆 Escribe algo en el área de texto para ver el análisis en tiempo real")
+        else:
+            st.info("👈 Escribe algo en el área de texto para ver el análisis en tiempo real")
 
 def display_dynamic_legend(results):
     """Muestra leyenda de colores con palabras reales encontradas"""
