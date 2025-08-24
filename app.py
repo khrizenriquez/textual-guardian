@@ -11,62 +11,83 @@ def main():
         layout="wide"
     )
     
-    # CSS personalizado para colores de highlighting
+    # CSS personalizado para colores de highlighting y tema oscuro
     st.markdown("""
     <style>
-    .participio { background-color: #ffeb3b; padding: 2px 4px; border-radius: 3px; }
-    .gerundio { background-color: #ff9800; color: white; padding: 2px 4px; border-radius: 3px; }
-    .expresion-problematica { background-color: #f44336; color: white; padding: 2px 4px; border-radius: 3px; }
-    .adjetivo-problematico { background-color: #9c27b0; color: white; padding: 2px 4px; border-radius: 3px; }
-    .palabra-repetida { background-color: #2196f3; color: white; padding: 2px 4px; border-radius: 3px; }
-    .coma-incorrecta { background-color: #e91e63; color: white; padding: 2px 4px; border-radius: 3px; }
+    .participio { background-color: #ffeb3b; color: #000; padding: 2px 4px; border-radius: 3px; font-weight: bold; }
+    .gerundio { background-color: #ff9800; color: white; padding: 2px 4px; border-radius: 3px; font-weight: bold; }
+    .expresion-problematica { background-color: #f44336; color: white; padding: 2px 4px; border-radius: 3px; font-weight: bold; }
+    .adjetivo-problematico { background-color: #9c27b0; color: white; padding: 2px 4px; border-radius: 3px; font-weight: bold; }
+    .palabra-repetida { background-color: #2196f3; color: white; padding: 2px 4px; border-radius: 3px; font-weight: bold; }
+    .coma-incorrecta { background-color: #e91e63; color: white; padding: 2px 4px; border-radius: 3px; font-weight: bold; }
     
     .metric-card {
-        background-color: #f8f9fa;
+        background-color: rgba(240, 242, 246, 0.1);
+        border: 1px solid rgba(128, 128, 128, 0.3);
         padding: 15px;
         border-radius: 10px;
         border-left: 4px solid #1f77b4;
         margin: 10px 0;
+        color: inherit;
     }
     
     .error-card {
-        background-color: #fff3cd;
+        background-color: rgba(255, 243, 205, 0.1);
+        border: 1px solid rgba(255, 193, 7, 0.3);
         padding: 10px;
         border-radius: 5px;
         border-left: 4px solid #ffc107;
         margin: 8px 0;
+        color: inherit;
     }
     
     .success-card {
-        background-color: #d4edda;
+        background-color: rgba(212, 237, 218, 0.1);
+        border: 1px solid rgba(40, 167, 69, 0.3);
         padding: 10px;
         border-radius: 5px;
         border-left: 4px solid #28a745;
         margin: 8px 0;
+        color: inherit;
+    }
+    
+    .centered-title {
+        text-align: center;
+        font-size: 3rem;
+        margin-bottom: 2rem;
+    }
+    
+    .text-highlight-container {
+        background-color: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(128, 128, 128, 0.3);
+        padding: 15px;
+        border-radius: 5px;
+        line-height: 1.6;
+        color: inherit;
     }
     </style>
     """, unsafe_allow_html=True)
     
-    # Título principal
-    st.title("📝 Textual Guardian")
-    st.markdown("**Analizador de Redacción Académica en Tiempo Real**")
+    # Título principal centrado
+    st.markdown('<h1 class="centered-title">📝 Textual Guardian</h1>', unsafe_allow_html=True)
     st.markdown("---")
     
-    # Layout en dos columnas
+    # Área de texto principal
+    st.markdown("### 📝 Ingresa tu texto:")
+    text_input = st.text_area(
+        "",
+        height=300,
+        placeholder="Escribe o pega aquí el texto que deseas analizar...\n\nEl análisis se actualiza automáticamente mientras escribes.",
+        key="text_input"
+    )
+    
+    # Análisis en tiempo real debajo del texto
+    st.markdown("### 📊 Análisis en Tiempo Real:")
+    
+    # Layout en dos columnas para el análisis
     col1, col2 = st.columns([1, 1])
     
     with col1:
-        st.markdown("### 📝 Ingresa tu texto:")
-        text_input = st.text_area(
-            "",
-            height=400,
-            placeholder="Escribe o pega aquí el texto que deseas analizar...\n\nEl análisis se actualiza automáticamente mientras escribes.",
-            key="text_input"
-        )
-    
-    with col2:
-        st.markdown("### 📊 Análisis en Tiempo Real:")
-        
         if text_input and text_input.strip():
             # Crear instancia del analizador
             analyzer = TextAnalyzer()
@@ -77,14 +98,16 @@ def main():
             # Mostrar estadísticas principales
             display_live_stats(results)
             
+        else:
+            st.info("👆 Escribe algo en el área de texto para ver el análisis en tiempo real")
+            
+    with col2:
+        if text_input and text_input.strip():
             # Mostrar texto marcado
             st.markdown("#### 🎨 Texto con Errores Marcados:")
             marked_text = create_highlighted_text(text_input, results)
             st.markdown(marked_text, unsafe_allow_html=True)
-            
         else:
-            st.info("👆 Escribe algo en el área de texto para ver el análisis en tiempo real")
-            
             # Mostrar leyenda de colores
             st.markdown("#### 🎨 Leyenda de Colores:")
             st.markdown("""
@@ -264,7 +287,7 @@ def create_highlighted_text(text, results):
     # Preservar saltos de línea
     highlighted_text = highlighted_text.replace('\n', '<br>')
     
-    return f'<div style="background-color: white; padding: 15px; border-radius: 5px; border: 1px solid #ddd; line-height: 1.6;">{highlighted_text}</div>'
+    return f'<div class="text-highlight-container">{highlighted_text}</div>'
 
 if __name__ == "__main__":
     main()
