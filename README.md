@@ -63,7 +63,7 @@ Para máxima simplicidad, usa los scripts incluidos:
 
 El script `./start.sh` realizará automáticamente todo el proceso:
 
-![Ejecución del script start.sh](https://github.com/user-attachments/assets/your-image-url-here)
+![Ejecución del script start.sh](docs/assets/script-start.png)
 
 *El script detiene cualquier contenedor existente, construye la imagen y ejecuta el nuevo contenedor automáticamente.*
 
