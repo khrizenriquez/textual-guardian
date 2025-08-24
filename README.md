@@ -11,6 +11,9 @@ Analizador de redacción académica desarrollado en Python con Streamlit que det
 - 🏷️ **Adjetivos calificativos** - Identifica adjetivos vagos como "grande", "pequeño"
 - ✏️ **Puntuación incorrecta** - Encuentra comas antes del conectivo "y"
 - 📊 **Estadísticas del texto** - Conteo de palabras y resumen de problemas
+- 🌐 **Interfaz bilingüe** - Soporte completo para español e inglés
+- ⚡ **Análisis en tiempo real** - Resultados instantáneos mientras escribes
+- 🎨 **Marcado visual** - Errores resaltados con diferentes colores
 
 ## 🚀 Instalación y Uso
 
@@ -144,9 +147,13 @@ podman run -d --name textual-guardian-dev -p 8501:8501 -v ./:/app:Z textual-guar
 
 ### 🖼️ Interfaz de la Aplicación
 
-![Interfaz de Textual Guardian](https://github.com/user-attachments/assets/your-interface-image-url-here)
+#### 🇪🇸 Interfaz en Español
+![Interfaz en Español](https://github.com/user-attachments/assets/spanish-interface-image-url-here)
 
-*La interfaz muestra análisis en tiempo real con leyenda dinámica, conteos específicos y texto marcado con colores para diferentes tipos de errores.*
+#### 🇺🇸 English Interface
+![English Interface](https://github.com/user-attachments/assets/english-interface-image-url-here)
+
+*La aplicación cuenta con soporte bilingüe completo (español/inglés) para la interfaz de usuario. El análisis de texto se mantiene basado en reglas académicas en español independientemente del idioma de la interfaz. La interfaz muestra análisis en tiempo real con leyenda dinámica, conteos específicos y texto marcado con colores para diferentes tipos de errores.*
 
 ## 🎯 Reglas de Redacción Implementadas
 
