@@ -58,6 +58,12 @@ Para máxima simplicidad, usa los scripts incluidos:
 ./stop.sh
 ```
 
+El script `./start.sh` realizará automáticamente todo el proceso:
+
+![Ejecución del script start.sh](https://github.com/user-attachments/assets/your-image-url-here)
+
+*El script detiene cualquier contenedor existente, construye la imagen y ejecuta el nuevo contenedor automáticamente.*
+
 ### Opción 2: Usando Makefile
 
 El proyecto incluye un `Makefile` para facilitar el uso con Podman:
