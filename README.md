@@ -35,7 +35,7 @@ pip install -r requirements.txt
 
 Ejecuta la aplicación con:
 ```bash
-streamlit run app.py
+streamlit run streamlit_app.py
 ```
 
 La aplicación se abrirá automáticamente en tu navegador en `http://localhost:8501`
@@ -168,7 +168,7 @@ La aplicación detecta problemas basados en las siguientes indicaciones académi
 
 ```
 textual-guardian/
-├── app.py              # Aplicación principal de Streamlit
+├── streamlit_app.py    # Aplicación principal de Streamlit
 ├── text_analyzer.py    # Módulo de análisis de texto
 ├── requirements.txt    # Dependencias de Python
 ├── Dockerfile          # Configuración de contenedor
