@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+import re
 from text_analyzer import TextAnalyzer
 
 def main():
@@ -10,186 +11,260 @@ def main():
         layout="wide"
     )
     
+    # CSS personalizado para colores de highlighting
+    st.markdown("""
+    <style>
+    .participio { background-color: #ffeb3b; padding: 2px 4px; border-radius: 3px; }
+    .gerundio { background-color: #ff9800; color: white; padding: 2px 4px; border-radius: 3px; }
+    .expresion-problematica { background-color: #f44336; color: white; padding: 2px 4px; border-radius: 3px; }
+    .adjetivo-problematico { background-color: #9c27b0; color: white; padding: 2px 4px; border-radius: 3px; }
+    .palabra-repetida { background-color: #2196f3; color: white; padding: 2px 4px; border-radius: 3px; }
+    .coma-incorrecta { background-color: #e91e63; color: white; padding: 2px 4px; border-radius: 3px; }
+    
+    .metric-card {
+        background-color: #f8f9fa;
+        padding: 15px;
+        border-radius: 10px;
+        border-left: 4px solid #1f77b4;
+        margin: 10px 0;
+    }
+    
+    .error-card {
+        background-color: #fff3cd;
+        padding: 10px;
+        border-radius: 5px;
+        border-left: 4px solid #ffc107;
+        margin: 8px 0;
+    }
+    
+    .success-card {
+        background-color: #d4edda;
+        padding: 10px;
+        border-radius: 5px;
+        border-left: 4px solid #28a745;
+        margin: 8px 0;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+    
     # Título principal
     st.title("📝 Textual Guardian")
-    st.subheader("Analizador de Redacción Académica")
+    st.markdown("**Analizador de Redacción Académica en Tiempo Real**")
     st.markdown("---")
     
-    # Descripción
-    st.markdown("""
-    **Textual Guardian** te ayuda a mejorar tu redacción académica detectando:
-    - 🔄 Palabras repetidas
-    - 📋 Participios (-ado, -ido)  
-    - 🔄 Gerundios (-ando, -endo)
-    - ⚠️ Expresiones problemáticas
-    - 📊 Estadísticas del texto
-    """)
+    # Layout en dos columnas
+    col1, col2 = st.columns([1, 1])
     
-    # Área de texto
-    text_input = st.text_area(
-        "Ingresa tu párrafo para analizar:",
-        height=200,
-        placeholder="Escribe o pega aquí el texto que deseas analizar..."
-    )
+    with col1:
+        st.markdown("### 📝 Ingresa tu texto:")
+        text_input = st.text_area(
+            "",
+            height=400,
+            placeholder="Escribe o pega aquí el texto que deseas analizar...\n\nEl análisis se actualiza automáticamente mientras escribes.",
+            key="text_input"
+        )
     
-    # Botón de análisis
-    if st.button("🔍 Analizar Texto", type="primary"):
-        if text_input.strip():
+    with col2:
+        st.markdown("### 📊 Análisis en Tiempo Real:")
+        
+        if text_input and text_input.strip():
             # Crear instancia del analizador
             analyzer = TextAnalyzer()
             
             # Realizar análisis
             results = analyzer.analyze_text(text_input)
             
-            # Mostrar resultados
-            display_results(results, text_input)
-        else:
-            st.warning("⚠️ Por favor, ingresa un texto para analizar.")
-
-def display_results(results, original_text):
-    """Muestra los resultados del análisis"""
-    
-    # Estadísticas generales
-    st.markdown("## 📊 Estadísticas Generales")
-    col1, col2, col3 = st.columns(3)
-    
-    with col1:
-        st.metric("Total de Palabras", results['word_count'])
-    
-    with col2:
-        repeated_count = len(results['repeated_words'])
-        st.metric("Palabras Repetidas", repeated_count)
-    
-    with col3:
-        issues_count = (
-            len(results['participios']) + 
-            len(results['gerundios']) + 
-            len(results['forbidden_expressions']) +
-            len(results['problematic_adjectives']) +
-            len(results['comma_before_y'])
-        )
-        st.metric("Problemas Detectados", issues_count)
-    
-    st.markdown("---")
-    
-    # Palabras repetidas
-    if results['repeated_words']:
-        st.markdown("## 🔄 Palabras Repetidas")
-        st.write("Estas palabras aparecen múltiples veces en tu texto:")
-        
-        # Crear DataFrame para mejor visualización
-        repeated_df = pd.DataFrame(
-            list(results['repeated_words'].items()),
-            columns=['Palabra', 'Repeticiones']
-        ).sort_values('Repeticiones', ascending=False)
-        
-        st.dataframe(repeated_df, use_container_width=True)
-        
-        with st.expander("💡 Sugerencia"):
-            st.info("Utiliza sinónimos para evitar la repetición excesiva de términos dentro del mismo párrafo.")
-    
-    # Participios
-    if results['participios']:
-        st.markdown("## 📋 Participios Detectados")
-        st.write("Palabras con terminaciones -ado, -ido encontradas:")
-        
-        participios_text = ", ".join(results['participios'])
-        st.warning(f"**{participios_text}**")
-        
-        with st.expander("💡 Sugerencia"):
-            st.info("Evita el uso excesivo de participios. Considera usar formas verbales activas o reestructurar las oraciones.")
-    
-    # Gerundios
-    if results['gerundios']:
-        st.markdown("## 🔄 Gerundios Detectados")
-        st.write("Palabras con terminaciones -ando, -endo encontradas:")
-        
-        gerundios_text = ", ".join(results['gerundios'])
-        st.warning(f"**{gerundios_text}**")
-        
-        with st.expander("💡 Sugerencia"):
-            st.info("Elimina el uso de gerundios. Utiliza formas verbales más directas y precisas.")
-    
-    # Expresiones problemáticas
-    if results['forbidden_expressions']:
-        st.markdown("## ⚠️ Expresiones Problemáticas")
-        st.write("Se encontraron estas expresiones que deberías evitar:")
-        
-        for expression in results['forbidden_expressions']:
-            st.error(f"**'{expression}'**")
-        
-        with st.expander("💡 Sugerencias de reemplazo"):
-            suggestions = {
-                "ya que": "debido a que, dado que, porque",
-                "puesto que": "dado que, considerando que",
-                "etc.": "tales como, entre otros, y otros vinculados",
-                "pero": "sin embargo, no obstante, aunque",
-                "puede": "permite, facilita, logra",
-                "pueden": "permiten, facilitan, logran",
-                "pretende": "busca, requiere, tiene como objetivo"
-            }
+            # Mostrar estadísticas principales
+            display_live_stats(results)
             
-            for expr in results['forbidden_expressions']:
-                if expr in suggestions:
-                    st.info(f"**'{expr}'** → {suggestions[expr]}")
-    
-    # Adjetivos problemáticos
-    if results['problematic_adjectives']:
-        st.markdown("## 🏷️ Adjetivos Calificativos Problemáticos")
-        st.write("Adjetivos que deberías evitar en redacción académica:")
-        
-        adjectives_text = ", ".join(results['problematic_adjectives'])
-        st.warning(f"**{adjectives_text}**")
-        
-        with st.expander("💡 Sugerencia"):
-            st.info("Evita adjetivos calificativos vagos. Usa términos más específicos y precisos.")
-    
-    # Comas antes de 'y'
-    if results['comma_before_y']:
-        st.markdown("## ✏️ Puntuación Incorrecta")
-        st.write("Se encontraron comas antes del conectivo 'y':")
-        
-        for comma_y in results['comma_before_y']:
-            st.warning(f"**'{comma_y}'**")
-        
-        with st.expander("💡 Sugerencia"):
-            st.info("No coloques coma antes del conectivo 'y', excepto en casos muy específicos.")
-    
-    # Si no hay problemas
-    if issues_count == 0 and not results['repeated_words']:
-        st.success("🎉 ¡Excelente! No se detectaron problemas comunes de redacción en tu texto.")
-    
-    # Texto marcado (opcional)
-    with st.expander("📄 Ver texto con marcas"):
-        marked_text = mark_text_issues(original_text, results)
-        st.markdown(marked_text, unsafe_allow_html=True)
+            # Mostrar texto marcado
+            st.markdown("#### 🎨 Texto con Errores Marcados:")
+            marked_text = create_highlighted_text(text_input, results)
+            st.markdown(marked_text, unsafe_allow_html=True)
+            
+        else:
+            st.info("👆 Escribe algo en el área de texto para ver el análisis en tiempo real")
+            
+            # Mostrar leyenda de colores
+            st.markdown("#### 🎨 Leyenda de Colores:")
+            st.markdown("""
+            <div style="margin: 10px 0;">
+                <span class="participio">Participios (-ado, -ido)</span><br><br>
+                <span class="gerundio">Gerundios (-ando, -endo)</span><br><br>
+                <span class="expresion-problematica">Expresiones problemáticas</span><br><br>
+                <span class="adjetivo-problematico">Adjetivos calificativos</span><br><br>
+                <span class="palabra-repetida">Palabras repetidas</span><br><br>
+                <span class="coma-incorrecta">Comas antes de 'y'</span>
+            </div>
+            """, unsafe_allow_html=True)
 
-def mark_text_issues(text, results):
-    """Marca visualmente los problemas en el texto"""
-    marked_text = text
+def display_live_stats(results):
+    """Muestra estadísticas en tiempo real"""
+    
+    # Conteos específicos
+    word_count = results['word_count']
+    sentence_count = results['sentence_count']
+    repeated_count = len(results['repeated_words'])
+    participios_count = len(results['participios'])
+    gerundios_count = len(results['gerundios'])
+    expresiones_count = len(results['forbidden_expressions'])
+    adjetivos_count = len(results['problematic_adjectives'])
+    comas_count = len(results['comma_before_y'])
+    
+    # Conteos de palabras específicas
+    specific_counts = results['specific_word_counts']
+    
+    # Calcular total de problemas
+    total_issues = participios_count + gerundios_count + expresiones_count + adjetivos_count + comas_count
+    
+    # Estadísticas principales con tarjetas
+    st.markdown(f"""
+    <div class="metric-card">
+        <h4>📊 Estadísticas Generales</h4>
+        <p><strong>Total de palabras:</strong> {word_count}</p>
+        <p><strong>Total de oraciones:</strong> {sentence_count}</p>
+        <p><strong>Palabras repetidas:</strong> {repeated_count}</p>
+        <p><strong>Total de problemas:</strong> {total_issues}</p>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    # Conteos de palabras específicas
+    st.markdown(f"""
+    <div class="metric-card">
+        <h4>🔤 Conteos Específicos</h4>
+        <p><strong>Cantidad de "y" utilizadas:</strong> {specific_counts['y']}</p>
+        <p><strong>Cantidad de "pero" utilizadas:</strong> {specific_counts['pero']}</p>
+        <p><strong>Cantidad de "que" utilizadas:</strong> {specific_counts['que']}</p>
+        <p><strong>Cantidad de "de" utilizadas:</strong> {specific_counts['de']}</p>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    # Conteos específicos por tipo de error
+    if total_issues > 0:
+        st.markdown("#### ⚠️ Problemas Detectados:")
+        
+        if participios_count > 0:
+            st.markdown(f"""
+            <div class="error-card">
+                <strong>📋 Cantidad de posibles participios:</strong> {participios_count}<br>
+                <small>Palabras: {', '.join(results['participios'])}</small>
+            </div>
+            """, unsafe_allow_html=True)
+        
+        if gerundios_count > 0:
+            st.markdown(f"""
+            <div class="error-card">
+                <strong>🔄 Cantidad de posibles gerundios:</strong> {gerundios_count}<br>
+                <small>Palabras: {', '.join(results['gerundios'])}</small>
+            </div>
+            """, unsafe_allow_html=True)
+        
+        if expresiones_count > 0:
+            st.markdown(f"""
+            <div class="error-card">
+                <strong>⚠️ Expresiones problemáticas:</strong> {expresiones_count}<br>
+                <small>Expresiones: {', '.join(results['forbidden_expressions'])}</small>
+            </div>
+            """, unsafe_allow_html=True)
+        
+        if adjetivos_count > 0:
+            st.markdown(f"""
+            <div class="error-card">
+                <strong>🏷️ Adjetivos problemáticos:</strong> {adjetivos_count}<br>
+                <small>Palabras: {', '.join(results['problematic_adjectives'])}</small>
+            </div>
+            """, unsafe_allow_html=True)
+        
+        if comas_count > 0:
+            st.markdown(f"""
+            <div class="error-card">
+                <strong>✏️ Comas incorrectas:</strong> {comas_count}<br>
+                <small>Encontradas: {', '.join(results['comma_before_y'])}</small>
+            </div>
+            """, unsafe_allow_html=True)
+        
+        if repeated_count > 0:
+            st.markdown("#### 🔄 Palabras Repetidas:")
+            for word, count in results['repeated_words'].items():
+                st.markdown(f"""
+                <div class="error-card">
+                    <strong>'{word}'</strong> aparece <strong>{count} veces</strong>
+                </div>
+                """, unsafe_allow_html=True)
+    
+    else:
+        st.markdown("""
+        <div class="success-card">
+            <h4>🎉 ¡Excelente!</h4>
+            <p>No se detectaron problemas comunes de redacción en tu texto.</p>
+        </div>
+        """, unsafe_allow_html=True)
+
+def create_highlighted_text(text, results):
+    """Crea texto con highlighting de colores para errores"""
+    highlighted_text = text
+    
+    # Marcar palabras repetidas (primero para que otros colores tomen prioridad)
+    for word in results['repeated_words'].keys():
+        pattern = r'\b' + re.escape(word) + r'\b'
+        highlighted_text = re.sub(
+            pattern, 
+            f'<span class="palabra-repetida">{word}</span>',
+            highlighted_text,
+            flags=re.IGNORECASE
+        )
     
     # Marcar participios
     for participio in results['participios']:
-        marked_text = marked_text.replace(
-            participio, 
-            f'<span style="background-color: #ffeb3b; padding: 2px;">{participio}</span>'
+        pattern = r'\b' + re.escape(participio) + r'\b'
+        highlighted_text = re.sub(
+            pattern,
+            f'<span class="participio">{participio}</span>',
+            highlighted_text,
+            flags=re.IGNORECASE
         )
     
-    # Marcar gerundios  
+    # Marcar gerundios
     for gerundio in results['gerundios']:
-        marked_text = marked_text.replace(
-            gerundio,
-            f'<span style="background-color: #ff9800; padding: 2px;">{gerundio}</span>'
+        pattern = r'\b' + re.escape(gerundio) + r'\b'
+        highlighted_text = re.sub(
+            pattern,
+            f'<span class="gerundio">{gerundio}</span>',
+            highlighted_text,
+            flags=re.IGNORECASE
         )
     
     # Marcar expresiones problemáticas
     for expression in results['forbidden_expressions']:
-        marked_text = marked_text.replace(
-            expression,
-            f'<span style="background-color: #f44336; color: white; padding: 2px;">{expression}</span>'
+        pattern = r'\b' + re.escape(expression) + r'\b'
+        highlighted_text = re.sub(
+            pattern,
+            f'<span class="expresion-problematica">{expression}</span>',
+            highlighted_text,
+            flags=re.IGNORECASE
         )
     
-    return marked_text
+    # Marcar adjetivos problemáticos
+    for adjetivo in results['problematic_adjectives']:
+        pattern = r'\b' + re.escape(adjetivo) + r'\b'
+        highlighted_text = re.sub(
+            pattern,
+            f'<span class="adjetivo-problematico">{adjetivo}</span>',
+            highlighted_text,
+            flags=re.IGNORECASE
+        )
+    
+    # Marcar comas antes de 'y'
+    for comma_y in results['comma_before_y']:
+        highlighted_text = highlighted_text.replace(
+            comma_y,
+            f'<span class="coma-incorrecta">{comma_y}</span>'
+        )
+    
+    # Preservar saltos de línea
+    highlighted_text = highlighted_text.replace('\n', '<br>')
+    
+    return f'<div style="background-color: white; padding: 15px; border-radius: 5px; border: 1px solid #ddd; line-height: 1.6;">{highlighted_text}</div>'
 
 if __name__ == "__main__":
     main()

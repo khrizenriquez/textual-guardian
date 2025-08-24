@@ -98,14 +98,41 @@ class TextAnalyzer:
         matches = re.finditer(pattern, text, re.IGNORECASE)
         return [match.group() for match in matches]
     
+    def count_specific_words(self, text: str) -> Dict[str, int]:
+        """Cuenta palabras específicas como 'y', 'pero', etc."""
+        text_lower = text.lower()
+        words = re.findall(r'\b\w+\b', text_lower)
+        
+        specific_counts = {
+            'y': words.count('y'),
+            'pero': words.count('pero'),
+            'que': words.count('que'),
+            'de': words.count('de'),
+            'el': words.count('el'),
+            'la': words.count('la'),
+            'en': words.count('en'),
+            'con': words.count('con'),
+            'por': words.count('por'),
+            'para': words.count('para')
+        }
+        
+        return specific_counts
+    
+    def count_sentences(self, text: str) -> int:
+        """Cuenta el número de oraciones en el texto"""
+        sentences = re.split(r'[.!?]+', text.strip())
+        return len([s for s in sentences if s.strip()])
+    
     def analyze_text(self, text: str) -> Dict:
         """Realiza un análisis completo del texto"""
         return {
             'word_count': self.count_words(text),
+            'sentence_count': self.count_sentences(text),
             'repeated_words': self.find_repeated_words(text),
             'participios': self.find_participios(text),
             'gerundios': self.find_gerundios(text),
             'forbidden_expressions': self.find_forbidden_expressions(text),
             'problematic_adjectives': self.find_problematic_adjectives(text),
-            'comma_before_y': self.check_comma_before_y(text)
+            'comma_before_y': self.check_comma_before_y(text),
+            'specific_word_counts': self.count_specific_words(text)
         }

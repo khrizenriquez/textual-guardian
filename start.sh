@@ -90,14 +90,6 @@ if podman ps --filter name=$CONTAINER_NAME --format "table {{.Names}}\t{{.Status
     echo -e "   Shell:       ${BLUE}podman exec -it $CONTAINER_NAME /bin/bash${NC}"
     echo -e "   Estado:      ${BLUE}make status${NC}"
     echo ""
-    
-    # Preguntar si quiere ver los logs
-    read -p "¿Quieres ver los logs en tiempo real? (y/N): " -n 1 -r
-    echo ""
-    if [[ $REPLY =~ ^[Yy]$ ]]; then
-        echo -e "${BLUE}📋 Mostrando logs (Ctrl+C para salir)...${NC}"
-        podman logs -f $CONTAINER_NAME
-    fi
 else
     echo -e "${RED}❌ El contenedor no se está ejecutando correctamente${NC}"
     echo -e "${YELLOW}📋 Logs del contenedor:${NC}"
