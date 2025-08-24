@@ -24,10 +24,10 @@ def main():
     .metric-card {
         background-color: rgba(240, 242, 246, 0.1);
         border: 1px solid rgba(128, 128, 128, 0.3);
-        padding: 15px;
-        border-radius: 10px;
+        padding: 12px;
+        border-radius: 8px;
         border-left: 4px solid #1f77b4;
-        margin: 10px 0;
+        margin: 8px 0;
         color: inherit;
     }
     
@@ -53,8 +53,9 @@ def main():
     
     .centered-title {
         text-align: center;
-        font-size: 3rem;
-        margin-bottom: 2rem;
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+        margin-top: 0;
     }
     
     .text-highlight-container {
@@ -70,14 +71,13 @@ def main():
     
     # Título principal centrado
     st.markdown('<h1 class="centered-title">📝 Textual Guardian</h1>', unsafe_allow_html=True)
-    st.markdown("---")
     
     # Layout principal en dos columnas
     col1, col2 = st.columns([1, 1])
     
     # COLUMNA IZQUIERDA - Área de texto
     with col1:
-        st.markdown("### 📝 Ingresa tu texto:")
+        st.markdown("#### 📝 Ingresa tu texto:")
         text_input = st.text_area(
             "",
             height=500,
@@ -95,14 +95,14 @@ def main():
             results = analyzer.analyze_text(text_input)
             
             # Mostrar leyenda de colores primero
-            st.markdown("#### 🎨 Leyenda de Colores:")
+            st.markdown("##### 🎨 Leyenda de Colores:")
             st.markdown("""
-            <div style="margin: 10px 0;">
-                <span class="participio">Participios (-ado, -ido)</span><br><br>
-                <span class="gerundio">Gerundios (-ando, -endo)</span><br><br>
-                <span class="expresion-problematica">Expresiones problemáticas</span><br><br>
-                <span class="adjetivo-problematico">Adjetivos calificativos</span><br><br>
-                <span class="palabra-repetida">Palabras repetidas</span><br><br>
+            <div style="margin: 5px 0;">
+                <span class="participio">Participios (-ado, -ido)</span><br>
+                <span class="gerundio">Gerundios (-ando, -endo)</span><br>
+                <span class="expresion-problematica">Expresiones problemáticas</span><br>
+                <span class="adjetivo-problematico">Adjetivos calificativos</span><br>
+                <span class="palabra-repetida">Palabras repetidas</span><br>
                 <span class="coma-incorrecta">Comas antes de 'y'</span>
             </div>
             """, unsafe_allow_html=True)
@@ -111,20 +111,20 @@ def main():
             display_specific_counts(results)
             
             # Mostrar texto marcado
-            st.markdown("#### 🎨 Texto con Errores Marcados:")
+            st.markdown("##### 🎨 Texto con Errores Marcados:")
             marked_text = create_highlighted_text(text_input, results)
             st.markdown(marked_text, unsafe_allow_html=True)
             
         else:
             # Mostrar leyenda de colores cuando no hay texto
-            st.markdown("#### 🎨 Leyenda de Colores:")
+            st.markdown("##### 🎨 Leyenda de Colores:")
             st.markdown("""
-            <div style="margin: 10px 0;">
-                <span class="participio">Participios (-ado, -ido)</span><br><br>
-                <span class="gerundio">Gerundios (-ando, -endo)</span><br><br>
-                <span class="expresion-problematica">Expresiones problemáticas</span><br><br>
-                <span class="adjetivo-problematico">Adjetivos calificativos</span><br><br>
-                <span class="palabra-repetida">Palabras repetidas</span><br><br>
+            <div style="margin: 5px 0;">
+                <span class="participio">Participios (-ado, -ido)</span><br>
+                <span class="gerundio">Gerundios (-ando, -endo)</span><br>
+                <span class="expresion-problematica">Expresiones problemáticas</span><br>
+                <span class="adjetivo-problematico">Adjetivos calificativos</span><br>
+                <span class="palabra-repetida">Palabras repetidas</span><br>
                 <span class="coma-incorrecta">Comas antes de 'y'</span>
             </div>
             """, unsafe_allow_html=True)
@@ -151,7 +151,7 @@ def display_specific_counts(results):
     total_issues = participios_count + gerundios_count + expresiones_count + adjetivos_count + comas_count
     
     # Conteos específicos compactos
-    st.markdown("#### 🔤 Conteos Específicos:")
+    st.markdown("##### 🔤 Conteos Específicos:")
     st.markdown(f"""
     <div class="metric-card">
         <p><strong>📊 Total de palabras:</strong> {word_count}</p>
