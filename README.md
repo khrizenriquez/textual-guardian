@@ -1,208 +1,208 @@
 # 📝 Textual Guardian
 
-Analizador de redacción académica desarrollado en Python con Streamlit que detecta problemas comunes en textos académicos.
+Academic writing analyzer developed in Python with Streamlit that detects common problems in academic texts.
 
-## ✨ Características
+## ✨ Features
 
-- 🔄 **Detección de palabras repetidas** - Identifica términos que se repiten excesivamente
-- 📋 **Detección de participios** - Encuentra palabras terminadas en -ado, -ido  
-- 🔄 **Detección de gerundios** - Localiza palabras terminadas en -ando, -endo
-- ⚠️ **Expresiones problemáticas** - Detecta frases como "ya que", "etc.", "pero"
-- 🏷️ **Adjetivos calificativos** - Identifica adjetivos vagos como "grande", "pequeño"
-- ✏️ **Puntuación incorrecta** - Encuentra comas antes del conectivo "y"
-- 📊 **Estadísticas del texto** - Conteo de palabras y resumen de problemas
-- 🌐 **Interfaz bilingüe** - Soporte completo para español e inglés
-- ⚡ **Análisis en tiempo real** - Resultados instantáneos mientras escribes
-- 🎨 **Marcado visual** - Errores resaltados con diferentes colores
+- 🔄 **Repeated word detection** - Identifies excessively repeated terms
+- 📋 **Participle detection** - Finds words ending in -ado, -ido  
+- 🔄 **Gerund detection** - Locates words ending in -ando, -endo
+- ⚠️ **Problematic expressions** - Detects phrases like "ya que", "etc.", "pero"
+- 🏷️ **Qualifying adjectives** - Identifies vague adjectives like "grande", "pequeño"
+- ✏️ **Incorrect punctuation** - Finds commas before the connector "y"
+- 📊 **Text statistics** - Word count and problem summary
+- 🌐 **Bilingual interface** - Complete support for Spanish and English
+- ⚡ **Real-time analysis** - Instant results while you type
+- 🎨 **Visual marking** - Errors highlighted with different colors
 
-## 🎯 Reglas de Redacción Implementadas
+## 🎯 Implemented Writing Rules
 
-La aplicación detecta problemas basados en las siguientes indicaciones académicas:
+The application detects problems based on the following academic guidelines:
 
-1. **Repetición de términos** - Sugiere usar sinónimos
-2. **Participios** - Evitar terminaciones -ado, -ido
-3. **Gerundios** - Eliminar terminaciones -ando, -endo
-4. **Expresiones prohibidas**:
-   - "ya que" → usar "debido a que", "dado que"
-   - "etc." → usar "tales como", "entre otros"
-   - "pero" → usar "sin embargo", "no obstante"
-   - "puede/pueden" → usar "permite", "facilita"
-   - "pretende" → usar "busca", "requiere"
-5. **Adjetivos calificativos** - Evitar términos vagos
-6. **Puntuación** - No usar coma antes de "y"
+1. **Term repetition** - Suggests using synonyms
+2. **Participles** - Avoid endings -ado, -ido
+3. **Gerunds** - Eliminate endings -ando, -endo
+4. **Prohibited expressions**:
+   - "ya que" → use "debido a que", "dado que"
+   - "etc." → use "tales como", "entre otros"
+   - "pero" → use "sin embargo", "no obstante"
+   - "puede/pueden" → use "permite", "facilita"
+   - "pretende" → use "busca", "requiere"
+5. **Qualifying adjectives** - Avoid vague terms
+6. **Punctuation** - Do not use comma before "y"
 
-## 🚀 Instalación y Uso
+## 🚀 Installation and Usage
 
-### Requisitos previos
-- Python 3.7 o superior
-- pip (gestor de paquetes de Python)
+### Prerequisites
+- Python 3.7 or higher
+- pip (Python package manager)
 
-### Instalación
+### Installation
 
-1. Clona este repositorio:
+1. Clone this repository:
 ```bash
 git clone <repository-url>
 cd textual-guardian
 ```
 
-2. Instala las dependencias:
+2. Install dependencies:
 ```bash
 pip install -r requirements.txt
 ```
 
-### Ejecución
+### Execution
 
-Ejecuta la aplicación con:
+Run the application with:
 ```bash
 streamlit run streamlit_app.py
 ```
 
-La aplicación se abrirá automáticamente en tu navegador en `http://localhost:8501`
+The application will automatically open in your browser at `http://localhost:8501`
 
-## 🐳 Uso con Podman
+## 🐳 Using with Podman
 
-### Requisitos previos para Podman
-- Podman instalado en tu sistema
-- podman-compose (opcional, para usar docker-compose.yml)
+### Podman Prerequisites
+- Podman installed on your system
+- podman-compose (optional, to use docker-compose.yml)
 
-### Opción 1: Scripts simplificados (Más fácil) ⚡
+### Option 1: Simplified Scripts (Easiest) ⚡
 
-Para máxima simplicidad, usa los scripts incluidos:
+For maximum simplicity, use the included scripts:
 
 ```bash
-# Reinicio completo: detener, eliminar, construir y ejecutar
+# Complete restart: stop, remove, build and run
 ./start.sh
 
-# Detener y limpiar todo
+# Stop and clean everything
 ./stop.sh
 ```
 
-El script `./start.sh` realizará automáticamente todo el proceso:
+The `./start.sh` script will automatically perform the entire process:
 
-![Ejecución del script start.sh](docs/assets/script-start.png)
+![Start.sh script execution](docs/assets/script-start.png)
 
-*El script detiene cualquier contenedor existente, construye la imagen y ejecuta el nuevo contenedor automáticamente.*
+*The script stops any existing containers, builds the image and runs the new container automatically.*
 
-### Opción 2: Usando Makefile
+### Option 2: Using Makefile
 
-El proyecto incluye un `Makefile` para facilitar el uso con Podman:
+The project includes a `Makefile` to facilitate Podman usage:
 
 ```bash
-# Ver todos los comandos disponibles
+# View all available commands
 make help
 
-# Reinicio completo (usa start.sh)
+# Complete restart (uses start.sh)
 make quick-start
 
-# Detener completamente (usa stop.sh)
+# Stop completely (uses stop.sh)
 make quick-stop
 
-# Comandos individuales:
-make build     # Construir la imagen
-make run       # Ejecutar el contenedor
-make logs      # Ver logs
-make clean     # Detener y limpiar
+# Individual commands:
+make build     # Build the image
+make run       # Run the container
+make logs      # View logs
+make clean     # Stop and clean
 ```
 
-### Opción 3: Usando podman-compose
+### Option 3: Using podman-compose
 
 ```bash
-# Levantar la aplicación
+# Start the application
 podman-compose up -d
 
-# Ver logs
+# View logs
 podman-compose logs -f
 
-# Detener la aplicación
+# Stop the application
 podman-compose down
 ```
 
-### Opción 4: Comandos manuales de Podman
+### Option 4: Manual Podman Commands
 
 ```bash
-# Construir la imagen
+# Build the image
 podman build -t textual-guardian .
 
-# Ejecutar el contenedor
+# Run the container
 podman run -d --name textual-guardian-app -p 8501:8501 textual-guardian
 
-# Ver logs
+# View logs
 podman logs -f textual-guardian-app
 
-# Detener el contenedor
+# Stop the container
 podman stop textual-guardian-app
 
-# Eliminar el contenedor
+# Remove the container
 podman rm textual-guardian-app
 ```
 
 
-### Modo Desarrollo
+### Development Mode
 
-Para desarrollo con recarga automática:
+For development with automatic reload:
 
 ```bash
-# Usando Makefile
+# Using Makefile
 make dev
 
-# O manualmente
+# Or manually
 podman run -d --name textual-guardian-dev -p 8501:8501 -v ./:/app:Z textual-guardian
 ```
 
-**Acceso:** La aplicación estará disponible en `http://localhost:8501`
+**Access:** The application will be available at `http://localhost:8501`
 
-## 📖 Cómo usar
+## 📖 How to Use
 
-1. Abre la aplicación en tu navegador
-2. Escribe o pega tu texto en el área de texto de la izquierda
-3. El análisis se actualiza **automáticamente en tiempo real**
-4. Revisa los resultados en la columna derecha:
-   - **Leyenda de Colores:** Muestra las palabras problemáticas encontradas
-   - **Conteos Específicos:** Estadísticas detalladas del texto
-   - **Texto Marcado:** Tu texto con errores resaltados en colores
+1. Open the application in your browser
+2. Write or paste your text in the left text area
+3. The analysis updates **automatically in real time**
+4. Review the results in the right column:
+   - **Color Legend:** Shows the problematic words found
+   - **Specific Counts:** Detailed text statistics
+   - **Marked Text:** Your text with errors highlighted in colors
 
-### 🖼️ Interfaz de la Aplicación
+### 🖼️ Application Interface
 
-#### 🇪🇸 Interfaz en Español
-![Interfaz en Español](docs/assets/textual-guardian-spanish.png)
+#### 🇪🇸 Spanish Interface
+![Spanish Interface](docs/assets/textual-guardian-spanish.png)
 
 #### 🇺🇸 English Interface
 ![English Interface](docs/assets/textual-guardian-english.png)
 
-*La aplicación cuenta con soporte bilingüe completo (español/inglés) para la interfaz de usuario. El análisis de texto se mantiene basado en reglas académicas en español independientemente del idioma de la interfaz. La interfaz muestra análisis en tiempo real con leyenda dinámica, conteos específicos y texto marcado con colores para diferentes tipos de errores.*
+*The application features complete bilingual support (Spanish/English) for the user interface. Text analysis remains based on Spanish academic rules regardless of the interface language. The interface shows real-time analysis with dynamic legend, specific counts and text marked with colors for different types of errors.*
 
-## 🛠️ Estructura del Proyecto
+## 🛠️ Project Structure
 
 ```
 textual-guardian/
-├── streamlit_app.py    # Aplicación principal de Streamlit
-├── text_analyzer.py    # Módulo de análisis de texto
-├── requirements.txt    # Dependencias de Python
-├── Dockerfile          # Configuración de contenedor
-├── docker-compose.yml  # Configuración para podman-compose
-├── Makefile           # Comandos automatizados para Podman
-├── start.sh           # Script de inicio simplificado
-├── stop.sh            # Script de detención y limpieza
-├── .dockerignore      # Archivos ignorados en la imagen
-├── docs/              # Documentación y recursos
-│   └── assets/        # Imágenes y recursos multimedia
+├── streamlit_app.py    # Main Streamlit application
+├── text_analyzer.py    # Text analysis module
+├── requirements.txt    # Python dependencies
+├── Dockerfile          # Container configuration
+├── docker-compose.yml  # Configuration for podman-compose
+├── Makefile           # Automated commands for Podman
+├── start.sh           # Simplified startup script
+├── stop.sh            # Stop and cleanup script
+├── .dockerignore      # Files ignored in image
+├── docs/              # Documentation and resources
+│   └── assets/        # Images and multimedia resources
 │       ├── script-start.png
 │       ├── textual-guardian-spanish.png
 │       └── textual-guardian-english.png
-├── README.md          # Este archivo
-└── LICENSE           # Licencia del proyecto
+├── README.md          # This file
+└── LICENSE           # Project license
 ```
 
-## 🤝 Contribuciones
+## 🤝 Contributing
 
-Las contribuciones son bienvenidas. Por favor:
+Contributions are welcome. Please:
 
-1. Fork el proyecto
-2. Crea una rama para tu feature (`git checkout -b feature/AmazingFeature`)
-3. Commit tus cambios (`git commit -m 'Add some AmazingFeature'`)
-4. Push a la rama (`git push origin feature/AmazingFeature`)
-5. Abre un Pull Request
+1. Fork the project
+2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
 
-## 📄 Licencia
+## 📄 License
 
-Este proyecto está bajo la licencia especificada en el archivo `LICENSE`.
+This project is under the license specified in the `LICENSE` file.
