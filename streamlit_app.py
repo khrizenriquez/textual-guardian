@@ -45,9 +45,9 @@ LANGUAGES = {
         "total_sentences": "📝 Total sentences:",
         "repeated_words": "🔄 Repeated words:",
         "total_problems": "⚠️ Total problems:",
-        "count_and": "Count of \"and\":",
-        "count_but": "Count of \"but\":",
-        "count_that": "Count of \"that\":",
+        "count_y": "Count of \"y\":",
+        "count_pero": "Count of \"pero\":",
+        "count_que": "Count of \"que\":",
         "possible_participles": "Possible participles:",
         "possible_gerunds": "Possible gerunds:",
         "participles": "Participles",
@@ -55,7 +55,7 @@ LANGUAGES = {
         "problematic_expressions": "Problematic expressions",
         "qualitative_adjectives": "Qualitative adjectives", 
         "repeated_words_label": "Repeated words",
-        "incorrect_commas": "Commas before 'and'"
+        "incorrect_commas": "Commas before 'y'"
     }
 }
 
@@ -277,21 +277,13 @@ def display_specific_counts(results, language="🇪🇸 Español"):
     # Conteos específicos compactos
     st.markdown(f"##### {get_text('specific_counts', language)}")
     
-    # Obtener conteos específicos según idioma
-    if language == "🇺🇸 English":
-        count1_label = get_text("count_and", language)
-        count1_value = specific_counts.get('and', 0)
-        count2_label = get_text("count_but", language) 
-        count2_value = specific_counts.get('but', 0)
-        count3_label = get_text("count_that", language)
-        count3_value = specific_counts.get('that', 0)
-    else:
-        count1_label = get_text("count_y", language)
-        count1_value = specific_counts.get('y', 0)
-        count2_label = get_text("count_pero", language)
-        count2_value = specific_counts.get('pero', 0)
-        count3_label = get_text("count_que", language)
-        count3_value = specific_counts.get('que', 0)
+    # Obtener conteos específicos (siempre en español, solo cambian las etiquetas)
+    count1_label = get_text("count_y", language)
+    count1_value = specific_counts.get('y', 0)
+    count2_label = get_text("count_pero", language)
+    count2_value = specific_counts.get('pero', 0)
+    count3_label = get_text("count_que", language)
+    count3_value = specific_counts.get('que', 0)
     
     st.markdown(f"""
     <div class="metric-card">
