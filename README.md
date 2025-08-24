@@ -148,10 +148,10 @@ podman run -d --name textual-guardian-dev -p 8501:8501 -v ./:/app:Z textual-guar
 ### 🖼️ Interfaz de la Aplicación
 
 #### 🇪🇸 Interfaz en Español
-![Interfaz en Español](https://github.com/user-attachments/assets/spanish-interface-image-url-here)
+![Interfaz en Español](docs/assets/textual-guardian-spanish.png)
 
 #### 🇺🇸 English Interface
-![English Interface](https://github.com/user-attachments/assets/english-interface-image-url-here)
+![English Interface](docs/assets/textual-guardian-english.png)
 
 *La aplicación cuenta con soporte bilingüe completo (español/inglés) para la interfaz de usuario. El análisis de texto se mantiene basado en reglas académicas en español independientemente del idioma de la interfaz. La interfaz muestra análisis en tiempo real con leyenda dinámica, conteos específicos y texto marcado con colores para diferentes tipos de errores.*
 
@@ -184,6 +184,10 @@ textual-guardian/
 ├── start.sh           # Script de inicio simplificado
 ├── stop.sh            # Script de detención y limpieza
 ├── .dockerignore      # Archivos ignorados en la imagen
+├── docs/              # Documentación y recursos
+│   └── assets/        # Imágenes y recursos multimedia
+│       ├── textual-guardian-spanish.png
+│       └── textual-guardian-english.png
 ├── README.md          # Este archivo
 └── LICENSE           # Licencia del proyecto
 ```
