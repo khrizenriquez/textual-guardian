@@ -72,39 +72,29 @@ def main():
     st.markdown('<h1 class="centered-title">📝 Textual Guardian</h1>', unsafe_allow_html=True)
     st.markdown("---")
     
-    # Área de texto principal
-    st.markdown("### 📝 Ingresa tu texto:")
-    text_input = st.text_area(
-        "",
-        height=300,
-        placeholder="Escribe o pega aquí el texto que deseas analizar...\n\nEl análisis se actualiza automáticamente mientras escribes.",
-        key="text_input"
-    )
+    # Layout principal en dos columnas
+    col1, col2 = st.columns([1, 1])
     
-    if text_input and text_input.strip():
-        # Crear instancia del analizador
-        analyzer = TextAnalyzer()
-        
-        # Realizar análisis
-        results = analyzer.analyze_text(text_input)
-        
-        # Análisis en tiempo real debajo del texto
-        st.markdown("### 📊 Análisis en Tiempo Real:")
-        
-        # Layout en dos columnas para el análisis
-        col1, col2 = st.columns([1, 1])
-        
-        with col1:
-            # Mostrar estadísticas principales
-            display_live_stats(results)
+    # COLUMNA IZQUIERDA - Área de texto
+    with col1:
+        st.markdown("### 📝 Ingresa tu texto:")
+        text_input = st.text_area(
+            "",
+            height=500,
+            placeholder="Escribe o pega aquí el texto que deseas analizar...\n\nEl análisis se actualiza automáticamente mientras escribes.",
+            key="text_input"
+        )
+    
+    # COLUMNA DERECHA - Análisis y leyenda
+    with col2:
+        if text_input and text_input.strip():
+            # Crear instancia del analizador
+            analyzer = TextAnalyzer()
             
-            # Mostrar texto marcado
-            st.markdown("#### 🎨 Texto con Errores Marcados:")
-            marked_text = create_highlighted_text(text_input, results)
-            st.markdown(marked_text, unsafe_allow_html=True)
+            # Realizar análisis
+            results = analyzer.analyze_text(text_input)
             
-        with col2:
-            # Mostrar leyenda de colores
+            # Mostrar leyenda de colores primero
             st.markdown("#### 🎨 Leyenda de Colores:")
             st.markdown("""
             <div style="margin: 10px 0;">
@@ -117,8 +107,65 @@ def main():
             </div>
             """, unsafe_allow_html=True)
             
-    else:
-        st.info("👆 Escribe algo en el área de texto para ver el análisis en tiempo real")
+            # Mostrar conteos específicos
+            display_specific_counts(results)
+            
+            # Mostrar texto marcado
+            st.markdown("#### 🎨 Texto con Errores Marcados:")
+            marked_text = create_highlighted_text(text_input, results)
+            st.markdown(marked_text, unsafe_allow_html=True)
+            
+        else:
+            # Mostrar leyenda de colores cuando no hay texto
+            st.markdown("#### 🎨 Leyenda de Colores:")
+            st.markdown("""
+            <div style="margin: 10px 0;">
+                <span class="participio">Participios (-ado, -ido)</span><br><br>
+                <span class="gerundio">Gerundios (-ando, -endo)</span><br><br>
+                <span class="expresion-problematica">Expresiones problemáticas</span><br><br>
+                <span class="adjetivo-problematico">Adjetivos calificativos</span><br><br>
+                <span class="palabra-repetida">Palabras repetidas</span><br><br>
+                <span class="coma-incorrecta">Comas antes de 'y'</span>
+            </div>
+            """, unsafe_allow_html=True)
+            
+            st.info("👈 Escribe algo en el área de texto para ver el análisis en tiempo real")
+
+def display_specific_counts(results):
+    """Muestra conteos específicos en formato compacto"""
+    
+    # Conteos específicos
+    word_count = results['word_count']
+    sentence_count = results['sentence_count']
+    repeated_count = len(results['repeated_words'])
+    participios_count = len(results['participios'])
+    gerundios_count = len(results['gerundios'])
+    expresiones_count = len(results['forbidden_expressions'])
+    adjetivos_count = len(results['problematic_adjectives'])
+    comas_count = len(results['comma_before_y'])
+    
+    # Conteos de palabras específicas
+    specific_counts = results['specific_word_counts']
+    
+    # Calcular total de problemas
+    total_issues = participios_count + gerundios_count + expresiones_count + adjetivos_count + comas_count
+    
+    # Conteos específicos compactos
+    st.markdown("#### 🔤 Conteos Específicos:")
+    st.markdown(f"""
+    <div class="metric-card">
+        <p><strong>📊 Total de palabras:</strong> {word_count}</p>
+        <p><strong>📝 Total de oraciones:</strong> {sentence_count}</p>
+        <p><strong>🔄 Palabras repetidas:</strong> {repeated_count}</p>
+        <p><strong>⚠️ Total de problemas:</strong> {total_issues}</p>
+        <hr>
+        <p><strong>Cantidad de "y":</strong> {specific_counts['y']}</p>
+        <p><strong>Cantidad de "pero":</strong> {specific_counts['pero']}</p>
+        <p><strong>Cantidad de "que":</strong> {specific_counts['que']}</p>
+        <p><strong>Posibles participios:</strong> {participios_count}</p>
+        <p><strong>Posibles gerundios:</strong> {gerundios_count}</p>
+    </div>
+    """, unsafe_allow_html=True)
 
 def display_live_stats(results):
     """Muestra estadísticas en tiempo real"""
