@@ -117,44 +117,32 @@ def display_dynamic_legend(results):
     
     # Participios
     if results['participios']:
-        participios_text = ', '.join(results['participios'][:5])  # Máximo 5 palabras
-        if len(results['participios']) > 5:
-            participios_text += "..."
+        participios_text = ', '.join(results['participios'])
         legend_items.append(f'<span class="participio">Participios</span>: {participios_text}')
     
     # Gerundios
     if results['gerundios']:
-        gerundios_text = ', '.join(results['gerundios'][:5])
-        if len(results['gerundios']) > 5:
-            gerundios_text += "..."
+        gerundios_text = ', '.join(results['gerundios'])
         legend_items.append(f'<span class="gerundio">Gerundios</span>: {gerundios_text}')
     
     # Expresiones problemáticas
     if results['forbidden_expressions']:
-        expresiones_text = ', '.join(results['forbidden_expressions'][:5])
-        if len(results['forbidden_expressions']) > 5:
-            expresiones_text += "..."
+        expresiones_text = ', '.join(results['forbidden_expressions'])
         legend_items.append(f'<span class="expresion-problematica">Expresiones problemáticas</span>: {expresiones_text}')
     
     # Adjetivos problemáticos
     if results['problematic_adjectives']:
-        adjetivos_text = ', '.join(results['problematic_adjectives'][:5])
-        if len(results['problematic_adjectives']) > 5:
-            adjetivos_text += "..."
+        adjetivos_text = ', '.join(results['problematic_adjectives'])
         legend_items.append(f'<span class="adjetivo-problematico">Adjetivos calificativos</span>: {adjetivos_text}')
     
     # Palabras repetidas
     if results['repeated_words']:
-        repetidas_text = ', '.join(list(results['repeated_words'].keys())[:5])
-        if len(results['repeated_words']) > 5:
-            repetidas_text += "..."
+        repetidas_text = ', '.join(list(results['repeated_words'].keys()))
         legend_items.append(f'<span class="palabra-repetida">Palabras repetidas</span>: {repetidas_text}')
     
     # Comas incorrectas
     if results['comma_before_y']:
-        comas_text = ', '.join([f'"{item}"' for item in results['comma_before_y'][:3]])
-        if len(results['comma_before_y']) > 3:
-            comas_text += "..."
+        comas_text = ', '.join([f'"{item}"' for item in results['comma_before_y']])
         legend_items.append(f'<span class="coma-incorrecta">Comas antes de \'y\'</span>: {comas_text}')
     
     if legend_items:
