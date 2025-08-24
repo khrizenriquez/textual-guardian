@@ -40,6 +40,79 @@ streamlit run app.py
 
 La aplicación se abrirá automáticamente en tu navegador en `http://localhost:8501`
 
+## 🐳 Uso con Podman
+
+### Requisitos previos para Podman
+- Podman instalado en tu sistema
+- podman-compose (opcional, para usar docker-compose.yml)
+
+### Opción 1: Usando Makefile (Recomendado)
+
+El proyecto incluye un `Makefile` para facilitar el uso con Podman:
+
+```bash
+# Ver todos los comandos disponibles
+make help
+
+# Construir la imagen
+make build
+
+# Ejecutar el contenedor
+make run
+
+# Ver logs
+make logs
+
+# Detener y limpiar
+make clean
+```
+
+### Opción 2: Comandos manuales de Podman
+
+```bash
+# Construir la imagen
+podman build -t textual-guardian .
+
+# Ejecutar el contenedor
+podman run -d --name textual-guardian-app -p 8501:8501 textual-guardian
+
+# Ver logs
+podman logs -f textual-guardian-app
+
+# Detener el contenedor
+podman stop textual-guardian-app
+
+# Eliminar el contenedor
+podman rm textual-guardian-app
+```
+
+### Opción 3: Usando podman-compose
+
+```bash
+# Levantar la aplicación
+podman-compose up -d
+
+# Ver logs
+podman-compose logs -f
+
+# Detener la aplicación
+podman-compose down
+```
+
+### Modo Desarrollo
+
+Para desarrollo con recarga automática:
+
+```bash
+# Usando Makefile
+make dev
+
+# O manualmente
+podman run -d --name textual-guardian-dev -p 8501:8501 -v ./:/app:Z textual-guardian
+```
+
+**Acceso:** La aplicación estará disponible en `http://localhost:8501`
+
 ## 📖 Cómo usar
 
 1. Abre la aplicación en tu navegador
@@ -69,7 +142,11 @@ La aplicación detecta problemas basados en las siguientes indicaciones académi
 textual-guardian/
 ├── app.py              # Aplicación principal de Streamlit
 ├── text_analyzer.py    # Módulo de análisis de texto
-├── requirements.txt    # Dependencias
+├── requirements.txt    # Dependencias de Python
+├── Dockerfile          # Configuración de contenedor
+├── docker-compose.yml  # Configuración para podman-compose
+├── Makefile           # Comandos automatizados para Podman
+├── .dockerignore      # Archivos ignorados en la imagen
 ├── README.md          # Este archivo
 └── LICENSE           # Licencia del proyecto
 ```
