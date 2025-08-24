@@ -80,35 +80,63 @@ def main():
         st.markdown("#### 📝 Ingresa tu texto:")
         text_input = st.text_area(
             "",
-            height=400,
-            placeholder="Escribe o pega aquí el texto que deseas analizar...\n\nEl análisis se actualiza automáticamente mientras escribes.",
-            key="text_input"
+            height=370,
+            placeholder="Escribe o pega aquí el texto que deseas analizar...\n\nPresiona 'Analizar' o sal del área de texto para ver los resultados.",
+            key="text_input",
+            on_change=lambda: st.session_state.update({"trigger_analysis": True})
         )
         
-        if text_input and text_input.strip():
+        # Botón de análisis
+        analyze_button = st.button("🔍 Analizar Texto", type="primary", use_container_width=True)
+        
+        # Inicializar session state
+        if "trigger_analysis" not in st.session_state:
+            st.session_state.trigger_analysis = False
+        
+        # Determinar si debe hacer análisis
+        should_analyze = (
+            (text_input and text_input.strip()) and 
+            (analyze_button or st.session_state.trigger_analysis)
+        )
+        
+        if should_analyze:
+            # Resetear trigger
+            st.session_state.trigger_analysis = False
+            
             # Crear instancia del analizador
             analyzer = TextAnalyzer()
             
             # Realizar análisis
             results = analyzer.analyze_text(text_input)
             
-            # Mostrar leyenda de colores con palabras reales debajo del párrafo
+            # Guardar resultados en session state
+            st.session_state.analysis_results = results
+            st.session_state.analyzed_text = text_input
+        
+        # Mostrar leyenda si hay resultados
+        if ("analysis_results" in st.session_state and 
+            "analyzed_text" in st.session_state and 
+            st.session_state.analyzed_text == text_input):
             st.markdown("##### 🎨 Leyenda de Colores:")
-            display_dynamic_legend(results)
+            display_dynamic_legend(st.session_state.analysis_results)
     
     # COLUMNA DERECHA - Análisis
     with col2:
-        if text_input and text_input.strip():
+        if ("analysis_results" in st.session_state and 
+            "analyzed_text" in st.session_state and 
+            text_input and text_input.strip() and
+            st.session_state.analyzed_text == text_input):
+            
             # Mostrar conteos específicos
-            display_specific_counts(results)
+            display_specific_counts(st.session_state.analysis_results)
             
             # Mostrar texto marcado
             st.markdown("##### 🎨 Texto con Errores Marcados:")
-            marked_text = create_highlighted_text(text_input, results)
+            marked_text = create_highlighted_text(text_input, st.session_state.analysis_results)
             st.markdown(marked_text, unsafe_allow_html=True)
             
         else:
-            st.info("👈 Escribe algo en el área de texto para ver el análisis en tiempo real")
+            st.info("👈 Escribe texto y presiona 'Analizar' o sal del área de texto para ver los resultados")
 
 def display_dynamic_legend(results):
     """Muestra leyenda de colores con palabras reales encontradas"""
