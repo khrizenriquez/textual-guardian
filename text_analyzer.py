@@ -76,8 +76,15 @@ class TextAnalyzer:
         text_lower = text.lower()
         
         for expression in self.forbidden_expressions:
-            if expression in text_lower:
-                found_expressions.append(expression)
+            # Para expresiones de múltiples palabras, buscar exactamente
+            if ' ' in expression:
+                if expression in text_lower:
+                    found_expressions.append(expression)
+            else:
+                # Para palabras individuales, usar límites de palabra
+                pattern = r'\b' + re.escape(expression) + r'\b'
+                if re.search(pattern, text_lower):
+                    found_expressions.append(expression)
         
         return found_expressions
     
