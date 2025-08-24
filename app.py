@@ -81,33 +81,29 @@ def main():
         key="text_input"
     )
     
-    # Análisis en tiempo real debajo del texto
-    st.markdown("### 📊 Análisis en Tiempo Real:")
-    
-    # Layout en dos columnas para el análisis
-    col1, col2 = st.columns([1, 1])
-    
-    with col1:
-        if text_input and text_input.strip():
-            # Crear instancia del analizador
-            analyzer = TextAnalyzer()
-            
-            # Realizar análisis
-            results = analyzer.analyze_text(text_input)
-            
+    if text_input and text_input.strip():
+        # Crear instancia del analizador
+        analyzer = TextAnalyzer()
+        
+        # Realizar análisis
+        results = analyzer.analyze_text(text_input)
+        
+        # Análisis en tiempo real debajo del texto
+        st.markdown("### 📊 Análisis en Tiempo Real:")
+        
+        # Layout en dos columnas para el análisis
+        col1, col2 = st.columns([1, 1])
+        
+        with col1:
             # Mostrar estadísticas principales
             display_live_stats(results)
             
-        else:
-            st.info("👆 Escribe algo en el área de texto para ver el análisis en tiempo real")
-            
-    with col2:
-        if text_input and text_input.strip():
             # Mostrar texto marcado
             st.markdown("#### 🎨 Texto con Errores Marcados:")
             marked_text = create_highlighted_text(text_input, results)
             st.markdown(marked_text, unsafe_allow_html=True)
-        else:
+            
+        with col2:
             # Mostrar leyenda de colores
             st.markdown("#### 🎨 Leyenda de Colores:")
             st.markdown("""
@@ -120,6 +116,9 @@ def main():
                 <span class="coma-incorrecta">Comas antes de 'y'</span>
             </div>
             """, unsafe_allow_html=True)
+            
+    else:
+        st.info("👆 Escribe algo en el área de texto para ver el análisis en tiempo real")
 
 def display_live_stats(results):
     """Muestra estadísticas en tiempo real"""
