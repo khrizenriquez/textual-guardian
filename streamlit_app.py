@@ -129,18 +129,27 @@ def main():
     </style>
     """, unsafe_allow_html=True)
     
-    # Selector de idioma
-    col_lang1, col_lang2, col_lang3 = st.columns([1, 2, 1])
-    with col_lang2:
+    # Título y selector de idioma en la misma línea
+    title_col1, title_col2, title_col3 = st.columns([1, 2, 1])
+    
+    with title_col2:
+        st.markdown(f'<h1 class="centered-title">{get_text("title", "🇪🇸 Español")}</h1>', unsafe_allow_html=True)
+    
+    with title_col3:
+        st.markdown("<div style='margin-top: 20px;'>", unsafe_allow_html=True)
         selected_language = st.selectbox(
-            "🌐 Language / Idioma:",
+            "🌐",
             options=list(LANGUAGES.keys()),
             index=0,
-            key="language_selector"
+            key="language_selector",
+            label_visibility="collapsed"
         )
+        st.markdown("</div>", unsafe_allow_html=True)
     
-    # Título principal centrado
-    st.markdown(f'<h1 class="centered-title">{get_text("title", selected_language)}</h1>', unsafe_allow_html=True)
+    # Actualizar título con idioma seleccionado si cambió
+    if selected_language != "🇪🇸 Español":
+        with title_col2:
+            st.markdown(f'<h1 class="centered-title">{get_text("title", selected_language)}</h1>', unsafe_allow_html=True)
     
     # Layout principal en dos columnas
     col1, col2 = st.columns([1, 1])
